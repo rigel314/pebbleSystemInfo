@@ -1,0 +1,16 @@
+
+{"friendlyVersion": "0.1",
+ "versionDefName": "RES_FOR_SYSINFO",
+ "media": [
+	   {
+	    "type":"font",
+	    "defName":"FONT_MONACO_10",
+	    "file":"fonts/monaco_10.ttf"
+	   },
+	   {
+	    "type":"font",
+	    "defName":"FONT_MONACO_30",
+	    "file":"fonts/monaco_30.ttf"
+	   }
+	  ]
+}
