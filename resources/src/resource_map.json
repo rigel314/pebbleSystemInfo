@@ -11,6 +11,11 @@
 	    "type":"font",
 	    "defName":"FONT_MONACO_30",
 	    "file":"fonts/monaco_30.ttf"
+	   },
+	   {
+	   	"type":"png",
+	   	"defName":"SYSINFO_MENU_ICON",
+	   	"file":"images/menu.png"
 	   }
 	  ]
 }

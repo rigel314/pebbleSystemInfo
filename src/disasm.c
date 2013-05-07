@@ -13,7 +13,7 @@ void showDisasm()
 	window_init(&disasmW, "Disassembler");
 
 	text_layer_init(&disasmW_warn, disasmW.layer.frame);
-	text_layer_set_text(&disasmW_warn, "Disassembler not available yet.  The code is available at http://github.com/ rigel314/ pebbleHexdump");
+	text_layer_set_text(&disasmW_warn, "Disassembler not available yet.  The code is available at http://github.com/ rigel314/ pebbleSystemInfo");
 
 	layer_add_child(&disasmW.layer, &disasmW_warn.layer);
 	

@@ -10,24 +10,29 @@
 PBL_APP_INFO(MY_UUID,
 						 "Sysinfo", "Computing Eureka",
 						 1, 0, /* App version */
-						 DEFAULT_MENU_ICON,
+						 RESOURCE_ID_SYSINFO_MENU_ICON,
 						 APP_INFO_STANDARD_APP);
 
 Window mainW;
-TextLayer mainW_editor;
+/*TextLayer mainW_editor;
 TextLayer mainW_disasm;
 TextLayer mainW_address;
-Layer mainW_lines;
+Layer mainW_lines;*/
+MenuLayer mainW_menu;
 
 Window editorW;
 TextLayer editorW_dump;
 
+Window setAddrW;
+TextLayer setAddrW_lbl;
+TextLayer setAddrW_word;
+TextLayer setAddrW_nibble;
+
 Window disasmW;
 TextLayer disasmW_warn;
 
-Window setAddrW;
-TextLayer setAddrW_word;
-TextLayer setAddrW_nibble;
+Window aboutW;
+TextLayer abountW_msg;
 
 int32_t address;
 int menuSel;
