@@ -14,14 +14,12 @@ PBL_APP_INFO(MY_UUID,
 						 APP_INFO_STANDARD_APP);
 
 Window mainW;
-/*TextLayer mainW_editor;
-TextLayer mainW_disasm;
-TextLayer mainW_address;
-Layer mainW_lines;*/
 MenuLayer mainW_menu;
 
 Window editorW;
+TextLayer editorW_page;
 TextLayer editorW_dump;
+InverterLayer editorW_selector;
 
 Window setAddrW;
 TextLayer setAddrW_lbl;

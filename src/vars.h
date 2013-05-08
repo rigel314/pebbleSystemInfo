@@ -1,12 +1,10 @@
 extern Window mainW;
-/*extern TextLayer mainW_editor;
-extern TextLayer mainW_disasm;
-extern TextLayer mainW_address;
-extern Layer mainW_lines;*/
 extern MenuLayer mainW_menu;
 
 extern Window editorW;
+extern TextLayer editorW_page;
 extern TextLayer editorW_dump;
+extern InverterLayer editorW_selector;
 
 extern Window setAddrW;
 extern TextLayer setAddrW_lbl;

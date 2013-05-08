@@ -10,11 +10,13 @@
 #define LEN 24
 #define DATA_START 7
 #define TEXT_START 19
-#define LINES 14
+#define LINES 15
 #define DATUMS 4
 
 
-char strHexDump[LEN*LINES+1+15];
+char strHexDump[LEN*LINES+1];
+char pageNum[] = "Page: XX";
+int selector_loc;
 
 
 void addByteToStr(char* str, int val)
@@ -28,10 +30,13 @@ void addAddressToStr(char* str, int32_t val)
 	for(int i=0;i<3;i++)
 		addByteToStr(str+2*(2-i), (val & (0xFF << 8*i)) >> (8*i));
 }
-void addFullAddressToStr(char* str, int32_t val)
+void addFullAddressToStr(char* str, int32_t val, bool big_endian)
 {
 	for(int i=0;i<4;i++)
-		addByteToStr(str+2*(3-i), (val & (0xFF << 8*i)) >> (8*i));
+		if(!big_endian)
+			addByteToStr(str+2*(3-i), (val & (0xFF << 8*i)) >> (8*i));
+		else
+			addByteToStr(str+2*i, (val & (0xFF << 8*i)) >> (8*i));
 }
 
 char npcFilterByte(char val)
@@ -43,6 +48,9 @@ char npcFilterByte(char val)
 
 void printScreenAtAddress(int32_t addr)
 {
+	addByteToStr(pageNum+6, (address & 0xFF000000) >> 24);
+	text_layer_set_text(&editorW_page, pageNum);
+
 	for(int i=0; i<LINES; i++)
 	{
 		addAddressToStr(strHexDump+i*LEN,i*DATUMS+addr);
@@ -59,32 +67,50 @@ void printScreenAtAddress(int32_t addr)
 
 		strHexDump[(i+1)*LEN-1] = '\n';
 	}
-	strcpy(strHexDump+LEN*LINES, "       Page:   ");
-	addByteToStr(strHexDump+LEN*LINES+13, (addr & 0xFF000000) >> 24);
-	strHexDump[LEN*LINES+15] = 0;
+	strHexDump[LEN*LINES] = 0;
 }
 
 void dump_up(ClickRecognizerRef recognizer, Window *window) {
 	(void)recognizer;
 	(void)window;
 	
-	printScreenAtAddress(address-=DATUMS);
-	layer_mark_dirty(&editorW_dump.layer);
+	if(selector_loc == 0)
+	{
+		printScreenAtAddress(address-=DATUMS);
+		layer_mark_dirty(&editorW_dump.layer);
+	}
+	else
+	{
+		selector_loc--;
+		/*editorW_selector.layer.frame.origin.y = selector_loc*10+1;
+		layer_mark_dirty(&editorW_selector.layer);*/
+		layer_set_frame(&editorW_selector.layer, GRect(6*7-1,selector_loc*10+1, 6*11+1, 10));
+	}
 }
 
 void dump_down(ClickRecognizerRef recognizer, Window *window) {
 	(void)recognizer;
 	(void)window;
 
-	printScreenAtAddress(address+=DATUMS);
-	layer_mark_dirty(&editorW_dump.layer);
+	if(selector_loc == LINES-1)
+	{
+		printScreenAtAddress(address+=DATUMS);
+		layer_mark_dirty(&editorW_dump.layer);
+	}
+	else
+	{
+		selector_loc++;
+		/*editorW_selector.layer.frame.origin.y = selector_loc*10+1;
+		layer_mark_dirty(&editorW_selector.layer);*/
+		layer_set_frame(&editorW_selector.layer, GRect(6*7-1,selector_loc*10+1, 6*11+1, 10));
+	}
 }
 
 void dump_select(ClickRecognizerRef recognizer, Window *window) {
 	(void)recognizer;
 	(void)window;
 
-	showSetVal((int32_t*)address, "Address:");
+	showSetVal((int32_t*)(address+4*selector_loc), "Address:", true);
 }
 
 void dump_click_config_provider(ClickConfig **config, Window *window) {
@@ -101,18 +127,30 @@ void dump_click_config_provider(ClickConfig **config, Window *window) {
 
 void showHexDump()
 {
+	selector_loc = 0;
+
 	window_init(&editorW, "Hex Editor");
+	window_set_fullscreen(&editorW, true);
 
 	//for(int x=0; x<LEN*LINES+1; x++)
 	//  strHexDump[x] = 'm';
 
 	printScreenAtAddress(address);
 
-	text_layer_init(&editorW_dump, editorW.layer.frame);
+	text_layer_init(&editorW_page, GRect(0,2,144,12));
+	text_layer_set_font(&editorW_page, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_MONACO_10)));
+	text_layer_set_text_alignment(&editorW_page, GTextAlignmentCenter);
+	addByteToStr(pageNum+6, (address & 0xFF000000) >> 24);
+	text_layer_set_text(&editorW_page, pageNum);
+	layer_add_child(&editorW.layer, &editorW_page.layer);
+
+	text_layer_init(&editorW_dump, GRect(0,15,144,168-15));
 	text_layer_set_font(&editorW_dump, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_MONACO_10)));
 	text_layer_set_text(&editorW_dump, strHexDump);
-
 	layer_add_child(&editorW.layer, &editorW_dump.layer);
+
+	inverter_layer_init(&editorW_selector, GRect(6*7-1,selector_loc*10+1, 6*11+1, 10));
+	layer_add_child(&editorW_dump.layer, &editorW_selector.layer);
 
 	window_set_click_config_provider(&editorW, (ClickConfigProvider) dump_click_config_provider);
 
