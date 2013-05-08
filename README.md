@@ -17,3 +17,5 @@ The other menu items will display informative text.
 
 
 Please don't blame me if you brick your pebble while playing with this hex editor.  This is a DANGEROUS tool, not a toy.  Be careful.
+
+0x2001C08C is where one of the global varables is stored on my Pebble.
