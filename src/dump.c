@@ -106,8 +106,14 @@ void dump_down(ClickRecognizerRef recognizer, Window *window) {
 void dump_select(ClickRecognizerRef recognizer, Window *window) {
 	(void)recognizer;
 	(void)window;
-
-	showSetVal((int32_t*)(address+4*selector_loc), "Address:", true);
+	
+	static char addrStr[10];
+	
+	addFullAddressToStr(addrStr, address+4*selector_loc);
+	addrStr[8] = ':';
+	addrStr[9] = 0;
+	
+	showSetVal((int32_t*)(address+4*selector_loc), addrStr, true);
 }
 
 void dump_click_config_provider(ClickConfig **config, Window *window) {

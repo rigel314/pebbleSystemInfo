@@ -19,16 +19,13 @@ char* choices[] = {
 
 void mainMenu_select_click(struct MenuLayer *menu_layer, MenuIndex *cell_index, void *callback_context)
 {
-	static char addrStr[15];
-
 	switch(cell_index->row)
 	{
 		case 0:
 			showHexDump();
 			break;
 		case 1:
-			addFullAddressToStr(addrStr, (int32_t) &address);
-			showSetVal(&address, addrStr, false);
+			showSetVal(&address, "Address:", false);
 			break;
 		case 2:
 			showDisasm();
