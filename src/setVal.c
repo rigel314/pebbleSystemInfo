@@ -20,10 +20,6 @@ int32_t* oldValPtr;
 int32_t newVal;
 bool big_end;
 
-// int32_t transposeInt(int32_t in)
-// {
-// 	return in & 0xFF |
-// }
 
 void addr_up(ClickRecognizerRef recognizer, Window *window) {
 	(void)recognizer;
@@ -41,7 +37,7 @@ void addr_down(ClickRecognizerRef recognizer, Window *window) {
 	(void)window;
 
 	newVal = (newVal | (0x0F << nibNum*4)) & ~((0x0F & ~((newVal>>nibNum*4)-1)) << nibNum*4);
-	addFullAddressToStr(word, newVal,);
+	addFullAddressToStr(word, newVal);
 	nibble[0] = nib2hex[(unsigned)(newVal & (0x0F << nibNum*4))>>nibNum*4];
 	layer_mark_dirty(&setAddrW_nibble.layer);
 	layer_mark_dirty(&setAddrW_word.layer);
@@ -68,6 +64,12 @@ void addr_select_long(ClickRecognizerRef recognizer, Window *window) {
 		*oldValPtr = newVal;
 	else
 		*oldValPtr = ((newVal & 0xFF)<<24) | ((newVal & 0xFF00)<<8) | ((newVal & 0xFF0000)>>8) | ((newVal & 0xFF000000)>>24);
+
+	if(big_end)
+	{ // If called from the hex editor.  I suppose I should use another variable, but this one is only ever true when called from the hex editor.
+		printScreenAtAddress(address);
+		layer_mark_dirty(&editorW_dump.layer);
+	}
 
 	window_stack_pop(true);
 }

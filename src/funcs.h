@@ -6,3 +6,4 @@ void showAbout();
 
 
 void addFullAddressToStr(char* str, int32_t val);
+void printScreenAtAddress(int32_t addr);

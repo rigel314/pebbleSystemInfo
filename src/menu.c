@@ -27,7 +27,7 @@ void mainMenu_select_click(struct MenuLayer *menu_layer, MenuIndex *cell_index, 
 			showHexDump();
 			break;
 		case 1:
-			addFullAddressToStr(addrStr, (int32_t) &address, false);
+			addFullAddressToStr(addrStr, (int32_t) &address);
 			showSetVal(&address, addrStr, false);
 			break;
 		case 2:
