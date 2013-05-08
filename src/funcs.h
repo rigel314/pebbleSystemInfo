@@ -5,4 +5,4 @@ void showDisasm();
 void showAbout();
 
 
-void addFullAddressToStr(char* str, int32_t val, bool big_endian);
+void addFullAddressToStr(char* str, int32_t val);

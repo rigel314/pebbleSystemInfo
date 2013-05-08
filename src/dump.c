@@ -30,13 +30,10 @@ void addAddressToStr(char* str, int32_t val)
 	for(int i=0;i<3;i++)
 		addByteToStr(str+2*(2-i), (val & (0xFF << 8*i)) >> (8*i));
 }
-void addFullAddressToStr(char* str, int32_t val, bool big_endian)
+void addFullAddressToStr(char* str, int32_t val)
 {
 	for(int i=0;i<4;i++)
-		if(!big_endian)
-			addByteToStr(str+2*(3-i), (val & (0xFF << 8*i)) >> (8*i));
-		else
-			addByteToStr(str+2*i, (val & (0xFF << 8*i)) >> (8*i));
+		addByteToStr(str+2*(3-i), (val & (0xFF << 8*i)) >> (8*i));
 }
 
 char npcFilterByte(char val)

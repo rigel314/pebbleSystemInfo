@@ -30,7 +30,7 @@ void addr_up(ClickRecognizerRef recognizer, Window *window) {
 	(void)window;
 
 	newVal = (newVal | (0x0F << nibNum*4)) & ~((0x0F & ~((newVal>>nibNum*4)+1)) << nibNum*4);
-	addFullAddressToStr(word, newVal, false);
+	addFullAddressToStr(word, newVal);
 	nibble[0] = nib2hex[(unsigned)(newVal & (0x0F << nibNum*4))>>nibNum*4];
 	layer_mark_dirty(&setAddrW_nibble.layer);
 	layer_mark_dirty(&setAddrW_word.layer);
@@ -41,7 +41,7 @@ void addr_down(ClickRecognizerRef recognizer, Window *window) {
 	(void)window;
 
 	newVal = (newVal | (0x0F << nibNum*4)) & ~((0x0F & ~((newVal>>nibNum*4)-1)) << nibNum*4);
-	addFullAddressToStr(word, newVal, false);
+	addFullAddressToStr(word, newVal,);
 	nibble[0] = nib2hex[(unsigned)(newVal & (0x0F << nibNum*4))>>nibNum*4];
 	layer_mark_dirty(&setAddrW_nibble.layer);
 	layer_mark_dirty(&setAddrW_word.layer);
@@ -105,7 +105,7 @@ void showSetVal(int32_t* val, char* lbl, bool big_endian)
 	layer_add_child(&setAddrW.layer, &setAddrW_lbl.layer);
 
 	text_layer_init(&setAddrW_word, GRect(0,50,144,48));
-	addFullAddressToStr(word, newVal, false);
+	addFullAddressToStr(word, newVal);
 	word[8] = 0;
 	text_layer_set_text(&setAddrW_word, word);
 	text_layer_set_font(&setAddrW_word, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_MONACO_30)));
