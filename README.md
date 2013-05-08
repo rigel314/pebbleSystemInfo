@@ -1,7 +1,7 @@
 pebbleSystemInfo
 ================
 
-Hex Editor and ~~Disassembler~~ for pebble.  The dissassembler is not yet available.
+Hex Editor and ~~Disassembler~~ for pebble.  The disassembler is not yet available.
 
 When launched, you get a menu.  Up, down, and select work as you would expect.
 
