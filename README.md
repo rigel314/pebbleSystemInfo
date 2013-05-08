@@ -13,7 +13,7 @@ Set Address functions the same as the word editor.
 
 The other menu items will display informative text.
 
-![Pebble image of hex dump](https://raw.github.com/rigel314/pebbleSystemInfo/master/src/hexdump.png)
+![Pebble image of hex dump](https://raw.github.com/rigel314/pebbleSystemInfo/master/hexdump.png)
 
 
 Please don't blame me if you brick your pebble while playing with this hex editor.  This is a DANGEROUS tool, not a toy.  Be careful.
