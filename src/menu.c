@@ -35,13 +35,13 @@ void mainMenu_select_click(struct MenuLayer *menu_layer, MenuIndex *cell_index, 
 			break;
 	}
 }
-void mainMenu_draw_row(GContext *ctx, Layer *cell_layer, MenuIndex *cell_index, void *callback_context)
+void mainMenu_draw_row(GContext *ctx, const Layer *cell_layer, MenuIndex *cell_index, void *callback_context)
 { // Adding the row number as text on the row cell.
 	graphics_context_set_text_color(ctx, GColorBlack); // This is important.
 	graphics_text_draw(ctx, choices[cell_index->row], fonts_get_system_font(FONT_KEY_GOTHIC_28), GRect(0,5,cell_layer->frame.size.w,cell_layer->frame.size.h), GTextOverflowModeTrailingEllipsis, GTextAlignmentCenter, NULL);
 	// Just saying cell_layer->frame for the 4th argument doesn't work.  Probably because the GContext is relative to the cell already, but the cell_layer.frame is relative to the menulayer or the screen or something.
 }
-//void mainMenu_draw_header(GContext *ctx, Layer *cell_layer, uint16_t section_index, void *callback_context)
+//void mainMenu_draw_header(GContext *ctx, const Layer *cell_layer, uint16_t section_index, void *callback_context)
 // Don't need to draw anything on header cells.  Especially since they are 0px tall.  I might later.
 int16_t mainMenu_get_header_height(struct MenuLayer *menu_layer, uint16_t section_index, void *callback_context)
 { // Always 30px tall for a header cell.  They can't be selected anyway.
