@@ -34,6 +34,9 @@ int menuSel;
 TextLayer* menuItems[3];
 const char nib2hex[] = "0123456789ABCDEF";
 
+GFont monaco10;
+GFont monaco30;
+
 
 void init()
 {
@@ -58,7 +61,7 @@ void init()
 	setAddrW = window_create();
 	setAddrW_lbl = text_layer_create(GRect(0,0,144,20));
 	setAddrW_word = text_layer_create(GRect(0,50,144,48));
-	setAddrW_nibble = text_layer_create(GRect(0,50,18,37));
+	setAddrW_nibble = text_layer_create(GRect(0,0,0,0));
 	layer_add_child(window_get_root_layer(setAddrW), text_layer_get_layer(setAddrW_lbl));
 	layer_add_child(window_get_root_layer(setAddrW), text_layer_get_layer(setAddrW_word));
 	layer_add_child(window_get_root_layer(setAddrW), text_layer_get_layer(setAddrW_nibble));
@@ -72,10 +75,10 @@ void init()
 	abountW_msg = text_layer_create(GRect(0,0,0,0));
 	layer_add_child(window_get_root_layer(aboutW), text_layer_get_layer(abountW_msg));
 
+	monaco10 = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_MONACO_10));
+	monaco30 = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_MONACO_30));
 
-	APP_LOG(APP_LOG_LEVEL_INFO, "test:%p", disasmW_warn);
 	showMenu();
-	// showAbout();
 }
 
 void deinit()
@@ -103,6 +106,9 @@ void deinit()
 
 	window_destroy(aboutW);
 	text_layer_destroy(abountW_msg);
+
+	fonts_unload_custom_font(monaco10);	
+	fonts_unload_custom_font(monaco30);
 }
 
 

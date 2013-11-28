@@ -22,3 +22,6 @@ extern int menuSel;
 extern TextLayer* menuItems[3];
 
 extern const char nib2hex[];
+
+extern GFont monaco10;
+extern GFont monaco30;

@@ -101,13 +101,14 @@ void showSetVal(int32_t* val, char* lbl, bool big_endian)
 	addFullAddressToStr(word, newVal);
 	word[8] = 0;
 	text_layer_set_text(setAddrW_word, word);
-	text_layer_set_font(setAddrW_word, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_MONACO_30)));
+	text_layer_set_font(setAddrW_word, monaco30);
 	// layer_add_child(window_get_root_layer(setAddrW), text_layer_get_layer(setAddrW_word));
 
 	nibble[0] = nib2hex[(unsigned)(newVal & (0x0F << 7*4))>>7*4];
 	nibble[1] = 0;
+	layer_set_frame(text_layer_get_layer(setAddrW_nibble), GRect(0,50,18,37));
 	text_layer_set_text(setAddrW_nibble, nibble);
-	text_layer_set_font(setAddrW_nibble, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_MONACO_30)));
+	text_layer_set_font(setAddrW_nibble, monaco30);
 	// setAddrW_nibble.text_color = GColorWhite;
 	// setAddrW_nibble.background_color = GColorBlack;
 	text_layer_set_text_color(setAddrW_nibble, GColorWhite);

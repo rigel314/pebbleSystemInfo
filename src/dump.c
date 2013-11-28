@@ -126,14 +126,15 @@ void showHexDump()
 	window_set_fullscreen(editorW, true);
 
 	printScreenAtAddress(address);
+	APP_LOG(APP_LOG_LEVEL_INFO, "String used to store the hexdump: %p\n", strHexDump);
 
-	text_layer_set_font(editorW_page, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_MONACO_10)));
+	text_layer_set_font(editorW_page, monaco10);
 	text_layer_set_text_alignment(editorW_page, GTextAlignmentCenter);
 	addByteToStr(pageNum+6, (address & 0xFF000000) >> 24);
 	text_layer_set_text(editorW_page, pageNum);
 	// layer_add_child(window_get_root_layer(editorW), text_layer_get_layer(editorW_page));
 
-	text_layer_set_font(editorW_dump, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_MONACO_10)));
+	text_layer_set_font(editorW_dump, monaco10);
 	text_layer_set_text(editorW_dump, strHexDump);
 	// layer_add_child(window_get_root_layer(editorW), text_layer_get_layer(editorW_dump));
 
