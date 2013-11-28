@@ -1,8 +1,4 @@
-#include "pebble_os.h"
-#include "pebble_app.h"
-#include "pebble_fonts.h"
-
-#include "resource_ids.auto.h"
+#include <pebble.h>
 
 #include "vars.h"
 #include "funcs.h"
@@ -10,12 +6,11 @@
 
 void showDisasm()
 {
-	window_init(&disasmW, "Disassembler");
+	layer_set_frame(text_layer_get_layer(disasmW_warn), layer_get_frame(window_get_root_layer(disasmW)));
+	// text_layer_set_size(disasmW_warn, layer_get_bounds(window_get_root_layer(disasmW)));
+	text_layer_set_text(disasmW_warn, "Disassembler not available yet.  The code is available at http://github.com/ rigel314/ pebbleSystemInfo");
 
-	text_layer_init(&disasmW_warn, disasmW.layer.frame);
-	text_layer_set_text(&disasmW_warn, "Disassembler not available yet.  The code is available at http://github.com/ rigel314/ pebbleSystemInfo");
-
-	layer_add_child(&disasmW.layer, &disasmW_warn.layer);
+	// layer_add_child(window_get_root_layer(disasmW), text_layer_get_layer(disasmW_warn));
 	
-	window_stack_push(&disasmW, true);
+	window_stack_push(disasmW, true);
 }
