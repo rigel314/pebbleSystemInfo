@@ -1,8 +1,4 @@
-#include "pebble_os.h"
-#include "pebble_app.h"
-#include "pebble_fonts.h"
-
-#include "resource_ids.auto.h"
+#include <pebble.h>
 
 #include "vars.h"
 #include "funcs.h"
@@ -46,7 +42,7 @@ char npcFilterByte(char val)
 void printScreenAtAddress(int32_t addr)
 {
 	addByteToStr(pageNum+6, (address & 0xFF000000) >> 24);
-	text_layer_set_text(&editorW_page, pageNum);
+	text_layer_set_text(editorW_page, pageNum);
 
 	for(int i=0; i<LINES; i++)
 	{
@@ -67,45 +63,45 @@ void printScreenAtAddress(int32_t addr)
 	strHexDump[LEN*LINES] = 0;
 }
 
-void dump_up(ClickRecognizerRef recognizer, Window *window) {
+void dump_up(ClickRecognizerRef recognizer, void* context)
+{
 	(void)recognizer;
-	(void)window;
 	
 	if(selector_loc == 0)
 	{
 		printScreenAtAddress(address-=DATUMS);
-		layer_mark_dirty(&editorW_dump.layer);
+		layer_mark_dirty(text_layer_get_layer(editorW_dump));
 	}
 	else
 	{
 		selector_loc--;
 		/*editorW_selector.layer.frame.origin.y = selector_loc*10+1;
 		layer_mark_dirty(&editorW_selector.layer);*/
-		layer_set_frame(&editorW_selector.layer, GRect(6*7-1,selector_loc*10+1, 6*11+1, 10));
+		layer_set_frame(inverter_layer_get_layer(editorW_selector), GRect(6*7-1,selector_loc*10+1, 6*11+1, 10));
 	}
 }
 
-void dump_down(ClickRecognizerRef recognizer, Window *window) {
+void dump_down(ClickRecognizerRef recognizer, void* context)
+{
 	(void)recognizer;
-	(void)window;
 
 	if(selector_loc == LINES-1)
 	{
 		printScreenAtAddress(address+=DATUMS);
-		layer_mark_dirty(&editorW_dump.layer);
+		layer_mark_dirty(text_layer_get_layer(editorW_dump));
 	}
 	else
 	{
 		selector_loc++;
 		/*editorW_selector.layer.frame.origin.y = selector_loc*10+1;
 		layer_mark_dirty(&editorW_selector.layer);*/
-		layer_set_frame(&editorW_selector.layer, GRect(6*7-1,selector_loc*10+1, 6*11+1, 10));
+		layer_set_frame(inverter_layer_get_layer(editorW_selector), GRect(6*7-1,selector_loc*10+1, 6*11+1, 10));
 	}
 }
 
-void dump_select(ClickRecognizerRef recognizer, Window *window) {
+void dump_select(ClickRecognizerRef recognizer, void* context)
+{
 	(void)recognizer;
-	(void)window;
 	
 	static char addrStr[10];
 	
@@ -116,46 +112,36 @@ void dump_select(ClickRecognizerRef recognizer, Window *window) {
 	showSetVal((int32_t*)(address+4*selector_loc), addrStr, true);
 }
 
-void dump_click_config_provider(ClickConfig **config, Window *window) {
-	(void)window;
-
-	config[BUTTON_ID_UP]->click.handler = (ClickHandler) dump_up;
-	config[BUTTON_ID_UP]->click.repeat_interval_ms = 100;
-		
-	config[BUTTON_ID_DOWN]->click.handler = (ClickHandler) dump_down;
-	config[BUTTON_ID_DOWN]->click.repeat_interval_ms = 100;
-
-	config[BUTTON_ID_SELECT]->click.handler = (ClickHandler) dump_select;
+void dump_click_config_provider(void* context)
+{
+	window_single_repeating_click_subscribe(BUTTON_ID_UP, 100, dump_up);
+	window_single_repeating_click_subscribe(BUTTON_ID_DOWN, 100, dump_down);
+	window_single_click_subscribe(BUTTON_ID_SELECT, dump_select);
 }
 
 void showHexDump()
 {
 	selector_loc = 0;
 
-	window_init(&editorW, "Hex Editor");
-	window_set_fullscreen(&editorW, true);
-
-	//for(int x=0; x<LEN*LINES+1; x++)
-	//  strHexDump[x] = 'm';
+	window_set_fullscreen(editorW, true);
 
 	printScreenAtAddress(address);
+	APP_LOG(APP_LOG_LEVEL_INFO, "String used to store the hexdump: %p\n", strHexDump);
 
-	text_layer_init(&editorW_page, GRect(0,2,144,12));
-	text_layer_set_font(&editorW_page, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_MONACO_10)));
-	text_layer_set_text_alignment(&editorW_page, GTextAlignmentCenter);
+	text_layer_set_font(editorW_page, monaco10);
+	text_layer_set_text_alignment(editorW_page, GTextAlignmentCenter);
 	addByteToStr(pageNum+6, (address & 0xFF000000) >> 24);
-	text_layer_set_text(&editorW_page, pageNum);
-	layer_add_child(&editorW.layer, &editorW_page.layer);
+	text_layer_set_text(editorW_page, pageNum);
+	// layer_add_child(window_get_root_layer(editorW), text_layer_get_layer(editorW_page));
 
-	text_layer_init(&editorW_dump, GRect(0,15,144,168-15));
-	text_layer_set_font(&editorW_dump, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_MONACO_10)));
-	text_layer_set_text(&editorW_dump, strHexDump);
-	layer_add_child(&editorW.layer, &editorW_dump.layer);
+	text_layer_set_font(editorW_dump, monaco10);
+	text_layer_set_text(editorW_dump, strHexDump);
+	// layer_add_child(window_get_root_layer(editorW), text_layer_get_layer(editorW_dump));
 
-	inverter_layer_init(&editorW_selector, GRect(6*7-1,selector_loc*10+1, 6*11+1, 10));
-	layer_add_child(&editorW_dump.layer, &editorW_selector.layer);
+	layer_set_frame(inverter_layer_get_layer(editorW_selector), GRect(6*7-1,selector_loc*10+1, 6*11+1, 10));
+	// layer_add_child(text_layer_get_layer(editorW_dump), inverter_layer_get_layer(editorW_selector));
 
-	window_set_click_config_provider(&editorW, (ClickConfigProvider) dump_click_config_provider);
+	window_set_click_config_provider(editorW, (ClickConfigProvider) dump_click_config_provider);
 
-	window_stack_push(&editorW, true);
+	window_stack_push(editorW, true);
 }

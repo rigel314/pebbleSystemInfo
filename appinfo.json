@@ -1,0 +1,35 @@
+{
+	"uuid": "E7BB7192-D935-453A-AEE2-01C8228ECC38",
+	"shortName": "SysInfo",
+	"longName": "pebbleSystemInfo",
+	"companyName": "Computing Eureka",
+	"versionCode": 2,
+	"versionLabel": "2.0.0",
+	"watchapp": {
+		"watchface": false
+	},
+	"appKeys": {
+		"dummy": 0
+	},
+	"resources": {
+		"media":
+		[
+			{
+				"type": "font",
+				"name": "FONT_MONACO_10",
+				"file": "fonts/monaco_10.ttf"
+			},
+			{
+				"type": "font",
+				"name": "FONT_MONACO_30",
+				"file": "fonts/monaco_30.ttf"
+			},
+			{
+				"type": "png",
+				"name": "SYSINFO_MENU_ICON",
+				"file": "images/menu.png",
+				"menuIcon": true
+			}
+		]
+	}
+}
