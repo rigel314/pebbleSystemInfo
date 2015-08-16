@@ -60,6 +60,12 @@ void printScreenAtAddress(int32_t addr)
 		}
 
 		strHexDump[(i+1)*LEN-1] = '\n';
+		// char* str = strHexDump + i*LEN;
+		// // int32_t addrtmp = addr + i*DATUMS;
+		// snprintf(str, sizeof(strHexDump), "%06x %02x %02x %02x %02x %c%c%c%c\n", (int)((addr + i*DATUMS)&0x00FFFFFF),
+		// 	*((char* )(addr+i*4+0)), *((char* )(addr+i*4+1)), *((char* )(addr+i*4+2)), *((char* )(addr+i*4+3)),
+		// 	npcFilterByte(*((char* )(addr+i*4+0))), npcFilterByte(*((char* )(addr+i*4+1))),
+		// 	npcFilterByte(*((char* )(addr+i*4+2))), npcFilterByte(*((char* )(addr+i*4+3))));
 	}
 	strHexDump[LEN*LINES] = 0;
 }

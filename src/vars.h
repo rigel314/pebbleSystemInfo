@@ -14,7 +14,7 @@ extern TextLayer* setAddrW_word;
 extern TextLayer* setAddrW_nibble;
 
 extern Window* disasmW;
-extern TextLayer* disasmW_warn;
+extern TextLayer* disasmW_dis;
 
 extern Window* aboutW;
 extern TextLayer* abountW_msg;

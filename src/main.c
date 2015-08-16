@@ -23,7 +23,7 @@ TextLayer* setAddrW_word;
 TextLayer* setAddrW_nibble;
 
 Window* disasmW;
-TextLayer* disasmW_warn;
+TextLayer* disasmW_dis;
 
 Window* aboutW;
 TextLayer* abountW_msg;
@@ -67,8 +67,8 @@ void init()
 	layer_add_child(window_get_root_layer(setAddrW), text_layer_get_layer(setAddrW_nibble));
 
 	disasmW = window_create();
-	disasmW_warn = text_layer_create(GRect(0,0,0,0));
-	layer_add_child(window_get_root_layer(disasmW), text_layer_get_layer(disasmW_warn));
+	disasmW_dis = text_layer_create(GRect(0,0,144,168));
+	layer_add_child(window_get_root_layer(disasmW), text_layer_get_layer(disasmW_dis));
 
 
 	aboutW = window_create();
@@ -102,7 +102,7 @@ void deinit()
 	text_layer_destroy(setAddrW_nibble);
 
 	window_destroy(disasmW);
-	text_layer_destroy(disasmW_warn);
+	text_layer_destroy(disasmW_dis);
 
 	window_destroy(aboutW);
 	text_layer_destroy(abountW_msg);
