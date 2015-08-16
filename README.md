@@ -16,15 +16,19 @@ Set Address functions the same as the word editor.
 
 Disassembler will open a dissassembly view of RAM.  Pressing Down will scroll
 by the instruction size at the top of the screen.  Pressing Up will always
-scroll up by the minimum instruction size(2).
+scroll up by the minimum instruction size(2). Pressing Select will toggle
+showing instruction bytes.
 
 About will display informative text.
 
 ![Pebble image of hex dump](https://raw.github.com/rigel314/pebbleSystemInfo/db98eba7b59fb6cf8af94aefcc2c9cebe0a5595e/images/hexdump.png)
 
-![Pebble image of disassembly](https://raw.github.com/rigel314/pebbleSystemInfo/e92e5025a4d528b15830003d395a82079979f541/images/disasm.png)
+![Pebble image of disassembly](https://raw.github.com/rigel314/pebbleSystemInfo/27d4f74c459ff7e5831fd0cc5ba285e17779eb98/images/disasm.png)
 
 Please don't blame me if you brick your pebble while playing with this hex editor.  This is a DANGEROUS tool, not a toy.  Be careful.
 
 ~~0x2001C08C is where one of my app's global varables is stored on my Pebble.~~
 This is very old information.  I think it has changed since I wrote it.
+
+Thanks to [radare](https://github.com/radare) for his help getting the
+disassembler code and for making it's output prettier.
