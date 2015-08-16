@@ -1,4 +1,5 @@
 #include <pebble.h>
+#include "EffectLayer/src/effect_layer.h"
 
 #include "vars.h"
 #include "funcs.h"
@@ -77,7 +78,7 @@ void dump_up(ClickRecognizerRef recognizer, void* context)
 		selector_loc--;
 		/*editorW_selector.layer.frame.origin.y = selector_loc*10+1;
 		layer_mark_dirty(&editorW_selector.layer);*/
-		layer_set_frame(inverter_layer_get_layer(editorW_selector), GRect(6*7-1,selector_loc*10+1, 6*11+1, 10));
+		layer_set_frame(effect_layer_get_layer(editorW_selector), GRect(6*7-1,selector_loc*10+1, 6*11+1, 10));
 	}
 }
 
@@ -95,7 +96,7 @@ void dump_down(ClickRecognizerRef recognizer, void* context)
 		selector_loc++;
 		/*editorW_selector.layer.frame.origin.y = selector_loc*10+1;
 		layer_mark_dirty(&editorW_selector.layer);*/
-		layer_set_frame(inverter_layer_get_layer(editorW_selector), GRect(6*7-1,selector_loc*10+1, 6*11+1, 10));
+		layer_set_frame(effect_layer_get_layer(editorW_selector), GRect(6*7-1,selector_loc*10+1, 6*11+1, 10));
 	}
 }
 
@@ -123,7 +124,9 @@ void showHexDump()
 {
 	selector_loc = 0;
 
-	window_set_fullscreen(editorW, true);
+	#ifndef PBL_PLATFORM_BASALT
+		window_set_fullscreen(editorW, true);
+	#endif
 
 	printScreenAtAddress(address);
 	APP_LOG(APP_LOG_LEVEL_INFO, "String used to store the hexdump: %p\n", strHexDump);
@@ -138,7 +141,7 @@ void showHexDump()
 	text_layer_set_text(editorW_dump, strHexDump);
 	// layer_add_child(window_get_root_layer(editorW), text_layer_get_layer(editorW_dump));
 
-	layer_set_frame(inverter_layer_get_layer(editorW_selector), GRect(6*7-1,selector_loc*10+1, 6*11+1, 10));
+	layer_set_frame(effect_layer_get_layer(editorW_selector), GRect(6*7-1,selector_loc*10+1, 6*11+1, 10));
 	// layer_add_child(text_layer_get_layer(editorW_dump), inverter_layer_get_layer(editorW_selector));
 
 	window_set_click_config_provider(editorW, (ClickConfigProvider) dump_click_config_provider);

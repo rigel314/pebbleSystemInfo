@@ -1,6 +1,5 @@
 #include <pebble.h>
-
-#include "resource_ids.auto.h"
+#include "EffectLayer/src/effect_layer.h"
 
 #include "funcs.h"
 #include "vars.h"
@@ -16,7 +15,7 @@ MenuLayer* mainW_menu;
 Window* editorW;
 TextLayer* editorW_page;
 TextLayer* editorW_dump;
-InverterLayer* editorW_selector;
+EffectLayer* editorW_selector;
 
 Window* setAddrW;
 TextLayer* setAddrW_lbl;
@@ -53,10 +52,11 @@ void init()
 	editorW = window_create();
 	editorW_page = text_layer_create(GRect(0,2,144,12));
 	editorW_dump = text_layer_create(GRect(0,15,144,168-15));
-	editorW_selector = inverter_layer_create(GRect(0,0,0,0));
+	editorW_selector = effect_layer_create(GRect(0,0,0,0));
+	effect_layer_add_effect(editorW_selector, effect_invert, NULL);
 	layer_add_child(window_get_root_layer(editorW), text_layer_get_layer(editorW_page));
 	layer_add_child(window_get_root_layer(editorW), text_layer_get_layer(editorW_dump));
-	layer_add_child(text_layer_get_layer(editorW_dump), inverter_layer_get_layer(editorW_selector));
+	layer_add_child(text_layer_get_layer(editorW_dump), effect_layer_get_layer(editorW_selector));
 
 	setAddrW = window_create();
 	setAddrW_lbl = text_layer_create(GRect(0,0,144,20));
@@ -94,7 +94,7 @@ void deinit()
 	window_destroy(editorW);
 	text_layer_destroy(editorW_page);
 	text_layer_destroy(editorW_dump);
-	inverter_layer_destroy(editorW_selector);
+	effect_layer_destroy(editorW_selector);
 
 	window_destroy(setAddrW);
 	text_layer_destroy(setAddrW_lbl);

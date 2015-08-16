@@ -34,7 +34,9 @@ void mainMenu_select_click(struct MenuLayer *menu_layer, MenuIndex *cell_index, 
 void mainMenu_draw_row(GContext *ctx, const Layer *cell_layer, MenuIndex *cell_index, void *callback_context)
 {
 	GRect frame = layer_get_frame(cell_layer);
-	graphics_context_set_text_color(ctx, GColorBlack); // This is important.
+	#ifndef PBL_PLATFORM_BASALT
+		graphics_context_set_text_color(ctx, GColorBlack); // This is important.
+	#endif
 	graphics_draw_text(ctx, choices[cell_index->row], fonts_get_system_font(FONT_KEY_GOTHIC_28), GRect(0,5,frame.size.w,frame.size.h), GTextOverflowModeTrailingEllipsis, GTextAlignmentCenter, NULL);
 	// Just saying cell_layer->frame for the 4th argument doesn't work.  Probably because the GContext is relative to the cell already, but the cell_layer.frame is relative to the menulayer or the screen or something.
 }
@@ -74,6 +76,10 @@ void showMenu()
 		.select_click = &mainMenu_select_click,
 		.draw_row = &mainMenu_draw_row,
 		.draw_header = mainMenu_draw_header,
+		#ifdef PBL_PLATFORM_BASALT
+			.selection_will_change = NULL,
+			.draw_background = NULL,
+		#endif
 		.select_long_click = NULL,
 		.selection_changed = NULL
 	};

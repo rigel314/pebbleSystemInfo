@@ -1,10 +1,12 @@
+#include "EffectLayer/src/effect_layer.h"
+
 extern Window* mainW;
 extern MenuLayer* mainW_menu;
 
 extern Window* editorW;
 extern TextLayer* editorW_page;
 extern TextLayer* editorW_dump;
-extern InverterLayer* editorW_selector;
+extern EffectLayer* editorW_selector;
 
 extern Window* setAddrW;
 extern TextLayer* setAddrW_lbl;
