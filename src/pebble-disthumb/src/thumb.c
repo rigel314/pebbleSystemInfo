@@ -170,14 +170,14 @@ static uint16_t thumb_disasm_loadadr(struct thumb_disasm_t *ai, uint16_t inst) {
 	uint16_t src = (inst >> 11) & 0x01;
 	uint16_t offset = (inst & 0xff) << 2;
 	snprintf (ai->str, sizeof (ai->str),
-		"add %s, %s, #%d", tbl_regs[(inst >> 8) & 0x07], src ? "sp" : "pc",
+		"add %s, %s, %d", tbl_regs[(inst >> 8) & 0x07], src ? "sp" : "pc",
 			offset);
 	return 0;
 }
 
 static uint16_t thumb_disasm_swi(struct thumb_disasm_t *ai, uint16_t inst) {
 	uint16_t comment = inst & 0x00ff;
-	snprintf (ai->str, sizeof (ai->str), "swi #%d", comment);
+	snprintf (ai->str, sizeof (ai->str), "swi %d", comment);
 	return 0;
 }
 
@@ -189,14 +189,14 @@ static uint16_t thumb_disasm_nop(struct thumb_disasm_t *ai, uint16_t inst) {
 static uint16_t thumb_disasm_ldrpcrel(struct thumb_disasm_t *ai, uint16_t inst) {
 	uint16_t offset = (inst & 0xff) << 2;
 	snprintf (ai->str, sizeof (ai->str),
-		"ldr %s, [pc, #%u]", tbl_regs[(inst >> 8) & 0x07], offset);
+		"ldr %s, [pc, %u]", tbl_regs[(inst >> 8) & 0x07], offset);
 	return 0;
 }
 
 static uint16_t thumb_disasm_ldrsprel(struct thumb_disasm_t *ai, uint16_t inst) {
 	uint16_t offset = (inst & 0xff) << 2;
 	snprintf (ai->str, sizeof (ai->str),
-		"%s %s, [sp, #%u]", (inst & 0x0800)?"ldr":"str",
+		"%s %s, [sp, %u]", (inst & 0x0800)?"ldr":"str",
 		tbl_regs[(inst >> 8) & 0x07], offset);
 	return 0;
 }
@@ -205,13 +205,13 @@ static uint16_t thumb_disasm_addsprel(struct thumb_disasm_t *ai, uint16_t inst) 
 	uint16_t offset = (inst & 0x7f) << 2;
 	int sub = ((inst >> 7) & 0x01);
 	snprintf (ai->str, sizeof (ai->str),
-		"%s sp, sp, #%u", sub? "sub": "add", offset);
+		"%s sp, sp, %u", sub? "sub": "add", offset);
 	return 0;
 }
 
 static uint16_t thumb_disasm_ldrimm(struct thumb_disasm_t *ai, uint16_t inst) {
 	uint16_t offset = (inst & 0x07c0) >> 6;
-	snprintf (ai->str, sizeof (ai->str), "%s%s %s, [%s, #%u]",
+	snprintf (ai->str, sizeof (ai->str), "%s%s %s, [%s, %u]",
 			(inst & 0x0800)?"ldr":"str", (inst & 0x1000)?"b":"",
 			tbl_regs[inst & 0x07], tbl_regs[(inst >> 3) & 0x07],
 			(inst & 0x1000)?offset:(offset << 2));
@@ -220,7 +220,7 @@ static uint16_t thumb_disasm_ldrimm(struct thumb_disasm_t *ai, uint16_t inst) {
 
 static uint16_t thumb_disasm_ldrhimm(struct thumb_disasm_t *ai, uint16_t inst) {
 	uint16_t offset = (inst & 0x07c0) >> 5;
-	snprintf (ai->str, sizeof (ai->str), "%s %s, [%s, #%u]", (inst & 0x0800)?"ldrh":"strh",
+	snprintf (ai->str, sizeof (ai->str), "%s %s, [%s, %u]", (inst & 0x0800)?"ldrh":"strh",
 			tbl_regs[inst & 0x07], tbl_regs[(inst >> 3) & 0x07], offset);
 	return 0;
 }
@@ -243,7 +243,7 @@ static uint16_t thumb_disasm_ldrsreg(struct thumb_disasm_t *ai, uint16_t inst) {
 static uint16_t thumb_disasm_immop(struct thumb_disasm_t *ai, uint16_t inst) {
 	uint16_t op = (inst >> 11) & 0x03;
 	snprintf (ai->str, sizeof (ai->str),
-		"%s %s, #%u", tbl_immops_t[op], tbl_regs[(inst >> 8) & 0x07], inst & 0xff);
+		"%s %s, %u", tbl_immops_t[op], tbl_regs[(inst >> 8) & 0x07], inst & 0xff);
 	return 0;
 }
 
@@ -251,7 +251,7 @@ static uint16_t thumb_disasm_addsub(struct thumb_disasm_t *ai, uint16_t inst) {
 	char last [32];
 	uint16_t op = (inst >> 9) & 0x01;
 	uint16_t immediate = (inst >> 10) & 0x01;
-	if (immediate) snprintf (last, sizeof (last), "#%d", (inst >> 6) & 0x07);
+	if (immediate) snprintf (last, sizeof (last), "%d", (inst >> 6) & 0x07);
 	else strcpy (last, tbl_regs[(inst >> 6) & 0x07]);
 	snprintf (ai->str, sizeof (ai->str),
 		"%s %s, %s, %s", op ? "sub" : "add",
@@ -262,7 +262,7 @@ static uint16_t thumb_disasm_addsub(struct thumb_disasm_t *ai, uint16_t inst) {
 static uint16_t thumb_disasm_movshift(struct thumb_disasm_t *ai, uint16_t inst) {
 	uint16_t op = (inst >> 11) & 0x03;
 	snprintf (ai->str, sizeof (ai->str),
-		"%s %s, %s, #%u", tbl_shifts[op],
+		"%s %s, %s, %u", tbl_shifts[op],
 		tbl_regs[inst & 0x07], tbl_regs[(inst >> 3) & 0x07], (inst >> 6) & 0x1f);
 	return 0;
 }
@@ -377,9 +377,9 @@ static uint32_t thumb2_disasm_coprocmov1(struct thumb_disasm_t *ai, uint32_t ins
 	uint16_t opc1 = (inst >> 21) & 0x07;
 	uint16_t opc2 = (inst >> 5) & 0x07;
 	char last[32];
-	if (opc2) snprintf (last, sizeof (last), ", #%u", opc2); else *last = 0;
+	if (opc2) snprintf (last, sizeof (last), ", %u", opc2); else *last = 0;
 	snprintf (ai->str, sizeof (ai->str),
-		"%s%s  p%lu, #%u, %s, cr%lu, cr%lu%s", (inst & 0x00100000)?"mrc":"mcr",
+		"%s%s  p%lu, %u, %s, cr%lu, cr%lu%s", (inst & 0x00100000)?"mrc":"mcr",
 		(inst & 0x10000000)?"2":"", get_nibble(inst, 2), opc1,
 		tbl_regs[get_nibble(inst, 3)], get_nibble(inst, 4), get_nibble(inst, 0), last);
 	return 0;
