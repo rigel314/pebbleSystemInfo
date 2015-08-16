@@ -5,36 +5,43 @@
 #include "pebble-disthumb/src/thumb.h"
 
 #define LEN 24
-// #define LENwN (LEN+1)
 #define LINES 16
 
-char strDisasm[LEN*LINES+1];
+char strDisasm[LEN*(LINES+1)+1];
 int showBytes = 0;
 
 void disasmAtAddress(int32_t addr)
 {
-	char line[128];
+	char line[2*LEN+1];
 	struct thumb_disasm_t dis;
 	int instLen = 0;
 
-	snprintf (strDisasm, LEN+1, "Page: 0x%x\n", (unsigned int)(addr >> 24));
+	snprintf (strDisasm, LEN+1, "       Page: 0x%03x\n", (unsigned int)(addr >> 24));
 	for (int i=1; i<LINES; i++)
 	{
-		unsigned int laddr = (unsigned int) (addr & 0xffffff);
+		unsigned int laddr = (unsigned int) (addr & 0x0fffff);
 		dis.buf = (const uint8_t*)(addr);
 		dis.pc = addr;
 		instLen = thumb_disasm (&dis);
 
 		APP_LOG(APP_LOG_LEVEL_INFO, "Instruction: %s\n", dis.str);
 
-		if (showBytes) {
-			if (instLen == 2) {
+		if (showBytes)
+		{
+			if (instLen == 2)
+			{
 				snprintf(line, sizeof(line), "%05x %02x %02x\n", laddr, dis.buf[0], dis.buf[1]);
-			} else if (instLen == 4) {
+			}
+			else if (instLen == 4)
+			{
 				snprintf(line, sizeof(line), "%05x %02x %02x %02x %02x\n", laddr, dis.buf[0], dis.buf[1], dis.buf[2], dis.buf[3]);
 			}
-		} else {
-			snprintf(line, sizeof(line), "%05x %s\n", laddr, dis.str);
+		}
+		else
+		{
+			int numChars = snprintf(line, sizeof(line), "%05x %s\n", laddr, dis.str);
+			if(numChars > LEN)
+				i++;
 		}
 		strcat (strDisasm, line);
 
