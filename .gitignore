@@ -10,3 +10,7 @@ src/EffectLayer/README.md
 src/EffectLayer/appinfo.json
 src/EffectLayer/resources/*
 src/EffectLayer/wscript
+src/pebble-disthumb/appinfo.json
+src/pebble-disthumb/README.md
+src/pebble-disthumb/resources/*
+src/pebble-disthumb/wscript
