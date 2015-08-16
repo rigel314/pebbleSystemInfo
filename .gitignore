@@ -5,3 +5,8 @@ build/*
 *~
 \#*\#
 *.swp
+src/EffectLayer/LICENSE
+src/EffectLayer/README.md
+src/EffectLayer/appinfo.json
+src/EffectLayer/resources/*
+src/EffectLayer/wscript
